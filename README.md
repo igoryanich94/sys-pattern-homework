@@ -24,71 +24,109 @@
 
 ### Задание 1
 
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
-
-```
-Поле для вставки кода...
-....
-....
-....
-....
-```
-
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 1](ссылка на скриншот 1)`
-
+Docker-Compose необходим для одновременного возведения и управления контейнерами и помогает
+сэкономить очень много времени и сил
 
 ---
 
 ### Задание 2
 
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
+# файл compose.yml
 
 ```
 Поле для вставки кода...
-....
-....
-....
-....
-```
+services:
 
-`При необходимости прикрепитe сюда скриншоты
-![Название скриншота 2](ссылка на скриншот 2)`
+volumes:
+
+networks:
+
+volumes:
 
 
 ---
 
 ### Задание 3
 
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
-
+# файл prometheusonly.yml - YAML файл
+# ./prometheus/prometheus.yml - конфиг прометеуса
 ```
 Поле для вставки кода...
-....
-....
-....
-....
+#prometheusonly.yml
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: svetikovia-netology-prometheus
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    networks:
+      - monitoring-stack
+    restart: always
+
+volumes:
+  prometheus-data:
+
+networks:
+  monitoring-stack:
+     driver: bridge
+     ipam:
+       config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+
+
+#prometheus.yml
+
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+#             - alertmanager:9093
+#  rule_files:
+#    - alertmanager.yml
+# alertls.yml
+#  groups:
+#    - name: Netology
+#      rules:
+#        - alert: Danger
+#          expr: docker{job="netology"} > 1
+#          for: 10s
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  # - job_name: "docker-server"
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+  #   static_configs:
+  #     - targets: ["172.17.0.1:9100"]
+
+  - job_name: 'pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ["pushgateway:9091"]
+
+
+
+
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -96,22 +134,148 @@
 
 ### Задание 4
 
-`Приведите ответ в свободной форме........`
-
-1. `Заполните здесь этапы выполнения, если требуется ....`
-2. `Заполните здесь этапы выполнения, если требуется ....`
-3. `Заполните здесь этапы выполнения, если требуется ....`
-4. `Заполните здесь этапы выполнения, если требуется ....`
-5. `Заполните здесь этапы выполнения, если требуется ....`
-6. 
+# файл pushgateway.yml - YAML файл
 
 ```
 Поле для вставки кода...
-....
-....
-....
-....
+#pushgateway.yml
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: svetikovia-netilogy-prometheus
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    networks:
+      - monitoring-stack
+    restart: always
+
+
+  pushgateway:
+    image: prom/pushgateway:v1.6.2
+    container_name: svetikovia-netology-pushgateway
+    ports:
+      - 9091:9091
+    networks:
+      - monitoring-stack
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+
+networks:
+  monitoring-stack:
+     driver: bridge
+     ipam:
+       config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+
+
 ```
 
 `При необходимости прикрепитe сюда скриншоты
 ![Название скриншота](ссылка на скриншот)`
+
+
+### Задание 5
+
+# К сожалению на 80 порту засел апач и я не смог его победить и прекинул графану на 81 порт(
+# файл grafana.yml - YAML файл
+# файл ./grafana/custom.ini - файл инициализации (лог/пас)
+
+
+#grafana.yml
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: svetikovia-netilogy-prometheus
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    networks:
+      - monitoring-stack
+    restart: always
+
+
+  pushgateway:
+    image: prom/pushgateway:v1.6.2
+    container_name: svetikovia-netology-pushgateway
+    ports:
+      - 9091:9091
+    networks:
+      - monitoring-stack
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    container_name: svetikovia-netology-grafana
+    environment:
+      GF_PATHS_CONFIG: /etc/grafana/custom.ini
+    ports:
+      - 81:3000
+    volumes:
+      - ./grafana:/etc/grafana
+      - grafana-data:/var/lib/grafana
+    networks:
+      - monitoring-stack
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+
+volumes:
+  prometheus-data:
+  grafana-data:
+
+networks:
+  monitoring-stack:
+     driver: bridge
+     ipam:
+       config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+
+
+#./grafana/custom.ini
+
+[security]
+
+admin_user = netology
+admin_password = netology
+
+
+## Задание 6 и 7
+
+# файл grafana.yml - YAML файл (Здесь поочередность и режимы запуска настроены, а также 
+# настроено использование одной сети)
+
+
+
+# detached режим docker-compose -f grafana.yml up -d
+
+# Скриншот №1
+![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen1.png)
+# Скриншот №2
+![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen2.png)
+
+
+## Задание 8
+
+docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
+
+
+
+
