@@ -34,7 +34,6 @@ Docker-Compose необходим для одновременного возве
 # файл compose.yml
 
 ```
-Поле для вставки кода...
 services:
 
 volumes:
@@ -42,18 +41,17 @@ volumes:
 networks:
 
 volumes:
+```
 
 
----
+
 
 ### Задание 3
 
 # файл prometheusonly.yml - YAML файл
 # ./prometheus/prometheus.yml - конфиг прометеуса
-```
-Поле для вставки кода...
-#prometheusonly.yml
 
+```
 services:
   prometheus:
     image: prom/prometheus:v2.47.2
@@ -78,10 +76,12 @@ networks:
        config:
        - subnet: 10.5.0.0/16
          gateway: 10.5.0.1
+```
 
 
 #prometheus.yml
 
+```
 # my global config
 global:
   scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
@@ -123,10 +123,6 @@ scrape_configs:
     honor_labels: true
     static_configs:
       - targets: ["pushgateway:9091"]
-
-
-
-
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -136,10 +132,8 @@ scrape_configs:
 
 # файл pushgateway.yml - YAML файл
 
-```
-Поле для вставки кода...
 #pushgateway.yml
-
+```
 services:
   prometheus:
     image: prom/prometheus:v2.47.2
@@ -176,8 +170,6 @@ networks:
        config:
        - subnet: 10.5.0.0/16
          gateway: 10.5.0.1
-
-
 ```
 
 `При необходимости прикрепитe сюда скриншоты
@@ -192,7 +184,7 @@ networks:
 
 
 #grafana.yml
-
+```
 services:
   prometheus:
     image: prom/prometheus:v2.47.2
@@ -247,15 +239,18 @@ networks:
        config:
        - subnet: 10.5.0.0/16
          gateway: 10.5.0.1
+```
 
 
 #./grafana/custom.ini
+```
 
 [security]
 
 admin_user = netology
 admin_password = netology
 
+```
 
 ## Задание 6 и 7
 
