@@ -265,9 +265,9 @@ docker-compose -f grafana.yml up -d
 ```
 
 #### Скриншот №1
-![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen1.png  "Optional title")
+![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen1.png?raw=true "Optional title")
 #### Скриншот №2
-![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen2.png  "Optional title")
+![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen2.png?raw=true "Optional title")
 
 
 ## Задание 8
