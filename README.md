@@ -22,16 +22,16 @@
 
 ---
 
-### Задание 1
+## Задание 1
 
 Docker-Compose необходим для одновременного возведения и управления контейнерами и помогает
 сэкономить очень много времени и сил
 
 ---
 
-### Задание 2
+## Задание 2
 
-# файл compose.yml
+### файл compose.yml
 
 ```
 services:
@@ -46,10 +46,10 @@ volumes:
 
 
 
-### Задание 3
+## Задание 3
 
-# файл prometheusonly.yml - YAML файл
-# ./prometheus/prometheus.yml - конфиг прометеуса
+### файл prometheusonly.yml - YAML файл
+### ./prometheus/prometheus.yml - конфиг прометеуса
 
 ```
 services:
@@ -79,7 +79,7 @@ networks:
 ```
 
 
-#prometheus.yml
+####prometheus.yml
 
 ```
 # my global config
@@ -128,11 +128,11 @@ scrape_configs:
 `При необходимости прикрепитe сюда скриншоты
 ![Название скриншота](ссылка на скриншот)`
 
-### Задание 4
+## Задание 4
 
-# файл pushgateway.yml - YAML файл
+### файл pushgateway.yml - YAML файл
 
-#pushgateway.yml
+#### pushgateway.yml
 ```
 services:
   prometheus:
@@ -176,14 +176,14 @@ networks:
 ![Название скриншота](ссылка на скриншот)`
 
 
-### Задание 5
+## Задание 5
 
-# К сожалению на 80 порту засел апач и я не смог его победить и прекинул графану на 81 порт(
-# файл grafana.yml - YAML файл
-# файл ./grafana/custom.ini - файл инициализации (лог/пас)
+### К сожалению на 80 порту засел апач и я не смог его победить и прекинул графану на 81 порт(
+### файл grafana.yml - YAML файл
+### файл ./grafana/custom.ini - файл инициализации (лог/пас)
 
 
-#grafana.yml
+#### grafana.yml
 ```
 services:
   prometheus:
@@ -242,7 +242,7 @@ networks:
 ```
 
 
-#./grafana/custom.ini
+#### ./grafana/custom.ini
 ```
 
 [security]
@@ -254,23 +254,26 @@ admin_password = netology
 
 ## Задание 6 и 7
 
-# файл grafana.yml - YAML файл (Здесь поочередность и режимы запуска настроены, а также 
-# настроено использование одной сети)
+#### файл grafana.yml - YAML файл (Здесь поочередность и режимы запуска настроены, а также 
+#### настроено использование одной сети)
 
 
 
-# detached режим docker-compose -f grafana.yml up -d
+### detached режим
+```
+docker-compose -f grafana.yml up -d
+```
 
-# Скриншот №1
+#### Скриншот №1
 ![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen1.png)
-# Скриншот №2
+#### Скриншот №2
 ![alt text](https://github.com/igoryanich94/sys-pattern-homework/tree/main/img/screen2.png)
 
 
 ## Задание 8
-
+```
 docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
-
+```
 
 
 
